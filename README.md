@@ -7,7 +7,7 @@ ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem)
   * production quality: CONCEPT, EXPERIMENTAL
   * license: BSD-2-clause License
   * author: dearblue <mailto:dearblue@users.noreply.github.com>
-  * report issue to: <https://github.com/dearblue/invfs/issues>
+  * report issue to: <https://github.com/dearblue/ruby-invfs/issues>
   * dependency ruby: ruby-2.2+
   * dependency ruby gems:
       * rubyzip-1.2.0 (BSD-2-Clause)
