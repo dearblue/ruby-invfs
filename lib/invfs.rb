@@ -136,22 +136,30 @@ module InVFS
   #
   LOADED_PREFIX = "<inVFS>:".freeze
 
-  def InVFS.findlib(vfs, lib)
-    case
-    when vfs.file?(lib)
-      lib
-    when vfs.file?(librb = lib + ".rb")
-      librb
-    when vfs.file?(libso = lib + ".so")
-      libso
+  def InVFS.findlib(vfs, lib, relative)
+    if relative
+      if vfs.file?(lib)
+        lib
+      else
+        nil
+      end
     else
-      nil
+      case
+      when vfs.file?(lib)
+        lib
+      when vfs.file?(librb = lib + ".rb")
+        librb
+      when vfs.file?(libso = lib + ".so")
+        libso
+      else
+        nil
+      end
     end
   end
 
   def InVFS.findvfs(lib, relative)
     findpath(lib, relative) do |vfs, sub|
-      next unless sub = findlib(vfs, sub)
+      next unless sub = findlib(vfs, sub, relative)
       return nil if vfs.__native_file_path?
       next if vfs.size(sub) > MAX_LOADSIZE
       return [vfs, sub]
@@ -230,7 +238,7 @@ module InVFS
       (vfs, sub) = InVFS.findvfs(base.path, true)
       if vfs
         sub = (Pathname(sub) + ".." + lib).cleanpath.to_path
-        sub = InVFS.findlib(vfs, sub)
+        sub = InVFS.findlib(vfs, sub, false)
         raise LoadError, "cannot load such file - #{lib}" unless sub
         return false if InVFS.loaded?(vfs, sub)
         InVFS.require_in(vfs, sub)
