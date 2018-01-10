@@ -250,7 +250,7 @@ module InVFS
     end
   end
 
-  class MultipleDirectory
+  class UnionFS
     attr_reader :dirs
 
     def initialize(*dirs)
@@ -306,6 +306,8 @@ module InVFS
       end
     end
   end
+
+  MultipleDirectory = UnionFS
 
   class StringMapFS
     attr_reader :map
