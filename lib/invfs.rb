@@ -321,7 +321,7 @@ module InVFS
     end
 
     def file?(path)
-      !!map.fetch(path)
+      !!map.has_key?(path)
     end
 
     def size(path)
