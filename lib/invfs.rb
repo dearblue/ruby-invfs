@@ -312,8 +312,8 @@ module InVFS
   class StringMapFS
     attr_reader :map
 
-    def initialize
-      @map = {}
+    def initialize(*map)
+      @map = Hash[*map]
     end
 
     def to_path
