@@ -306,6 +306,30 @@ module InVFS
       end
     end
   end
+
+  class StringMapFS
+    attr_reader :map
+
+    def initialize
+      @map = {}
+    end
+
+    def to_path
+      sprintf %(#<%s 0x%08x>) % [self.class, object_id]
+    end
+
+    def file?(path)
+      !!map.fetch(path)
+    end
+
+    def size(path)
+      map.fetch(path)&.bytesize
+    end
+
+    def read(path)
+      map.fetch(path)&.to_s
+    end
+  end
 end
 
 module InVFS
