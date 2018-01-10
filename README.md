@@ -26,25 +26,55 @@ ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem)
 
 ## How to use (使い方)
 
+この例では ``mybox.zip`` という Zip 書庫ファイルの中に ``mybox/core.rb``
+という Ruby スクリプトファイルが存在しているものとして解説を進めていきます。
+
+mybox.zip の中身:
+
+```text
+$ unzip -v mybox.zip
+Archive:  mybox.zip
+ Length   Method    Size  Cmpr    Date    Time   CRC-32   Name
+--------  ------  ------- ---- ---------- ----- --------  ----
+      69  Defl:X       60  13% 01-26-2017 00:24 8d7bd341  mybox/core.rb
+--------          -------  ---                            -------
+      69               60  13%                            1 file
+```
+
+mybox/core.rb の中身:
+
+```text
+$ unzip -p mybox.zip mybox/core.rb
+module MyBox
+  def MyBox.sayhello!
+    puts "Hello, Ruby!"
+  end
+end
+```
+
+Ruby スクリプトで実際に利用する場合は次のようにします:
+
 ```ruby:ruby
-require "invfs/zip"
+require "invfs/zip"           # (1)
 
-$: << InVFS.zip("mybox.zip")
+$: << InVFS.zip("mybox.zip")  # (2)
 
-require "mybox/core"
+require "mybox/core"          # (3)
+
 MyBox.sayhello!
+# => Hello, Ruby!
 ```
 
  1. ``require "invfs"`` すると、それ以降で VFS を探す機能が利用できるようになります。
 
-    ``require "invfs/zip"`` すると、rubyzip を用いて zip ファイルから読み込めるようになります。
+    ``require "invfs/zip"`` すると、rubyzip を用いて zip 書庫ファイルから読み込めるようになります。
 
  2. ``$:`` に VFS としての機能を持った任意のオブジェクトを追加します。
 
     ``$: << InVFS.zip("mybox.zip")`` の部分です。
 
  3. ``require`` で任意のライブラリを指定します。
- 
+
     VFS 内から同じ VFS のファイルを指定したい場合、``require_relative`` も利用できます。
 
 
