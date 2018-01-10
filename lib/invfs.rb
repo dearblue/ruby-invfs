@@ -198,10 +198,14 @@ module InVFS
   end
 
   def InVFS.require_in(vfs, path)
-    code = vfs.read(path)
+    code = String(vfs.read(path))
     loadpath = File.join(vfs, path)
     unless File.extname(path) == ".so"
-      code.force_encoding(Encoding::UTF_8)
+      unless code.encoding == Encoding::UTF_8
+        code = code.dup if code.frozen?
+        code.force_encoding(Encoding::UTF_8)
+      end
+
       eval code, InVFS::TOPLEVEL_BINDING.dup, loadpath, 1
     else
       Dir.mktmpdir do |dir|
