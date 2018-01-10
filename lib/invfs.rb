@@ -325,11 +325,11 @@ module InVFS
     end
 
     def size(path)
-      map.fetch(path)&.bytesize
+      (map[path] or return nil).bytesize
     end
 
     def read(path)
-      map.fetch(path)&.to_s
+      (map[path] or return nil).to_s
     end
   end
 end
