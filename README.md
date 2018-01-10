@@ -2,9 +2,9 @@
 
 ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem) 対応機能を追加します。
 
-  * package name: invfs
-  * version: 0.1
-  * production quality: CONCEPT, EXPERIMENTAL
+  * package name: invfs <https://github.com/dearblue/ruby-invfs>
+  * version: 0.2
+  * production quality: CONCEPT, EXPERIMENTAL, UNSTABLE
   * license: BSD-2-clause License
   * author: dearblue <mailto:dearblue@users.noreply.github.com>
   * report issue to: <https://github.com/dearblue/ruby-invfs/issues>
@@ -26,8 +26,13 @@ ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem)
 
 ## How to use (使い方)
 
-```shell
-$ ruby -r invfs/zip -e '$: << InVFS.zip("mybox.zip"); require "mybox/core"; MyBox.sayhello!'
+```ruby:ruby
+require "invfs/zip"
+
+$: << InVFS.zip("mybox.zip")
+
+require "mybox/core"
+MyBox.sayhello!
 ```
 
  1. ``require "invfs"`` すると、それ以降で VFS を探す機能が利用できるようになります。
@@ -54,32 +59,37 @@ VFS オブジェクトは ``$:`` に追加する、利用者定義のロード�
   * ``.size(path) -> integer``
   * ``.read(path) -> string as binary``
 
-``lib/invfs/zip.rb`` が参考になるかもしれません。
+実際にどのように定義すればいいのかについては、[lib/invfs/zip.rb](lib/invfs/zip.rb) あるいは [lib/invfs.rb](lib.invfs.rb) で定義されている ``InVFS::UnionFS``、``InVFS::StringMapFS`` を参考にして下さい。
 
 ### ``.to_path() -> string``
 
 ロードパスに変換するためのメソッドです。
-文字列を返してください。
 
-ruby が提供する本来の require の内部や File.join は、文字列以外を ``to_path``
-で文字列への変換を試みています (``file.c:rb_get_path_check_to_string``)。
+***文字列を返してください。***
+
+ruby が提供する本来の require の内部や File.join が ``to_path`` して、
+文字列以外を文字列に変換するために呼びます
+(``file.c:rb_get_path_check_to_string``)。
 
 ### ``.file?(path) -> true or false``
 
 VFS 内部にファイルが存在するかを確認するためのメソッドです。
-真偽値を返して下さい。
+
+***真偽値を返して下さい。***
 
 path に関して発生した例外は出来る限り捕捉して、false を返すべきです。
 
 ### ``.size(path) -> integer``
 
 ファイルサイズを取得するためのメソッドです。
-0 以上の整数値を返して下さい。
+
+***0 以上の整数値を返して下さい。***
 
 ### ``.read(path) -> string as binary``
 
 VFS からファイルを読み込むためのメソッドです。
-バイナリデータとしての文字列、または nil を返して下さい。
+
+***文字列、または nil を返して下さい。***
 
 
 ## Environment Variables (環境変数について)
