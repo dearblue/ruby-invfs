@@ -285,7 +285,7 @@ module InVFS
     end
 
     def to_path
-      %(#<#{self.class} #{dirs.join(",")}>)
+      %(#<#{self.class} #{dirs.map { |d| "<#{d}>" }.join(", ")}>)
     end
 
     def to_s
@@ -300,7 +300,7 @@ module InVFS
       q.group(2, "#<#{self.class}", ">") do
         dirs.each_with_index do |d, i|
           q.text "," if i > 0
-          q.breakable
+          q.breakable " "
           d.pretty_print q
         end
       end
