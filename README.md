@@ -122,6 +122,41 @@ VFS からファイルを読み込むためのメソッドです。
 ***文字列、または nil を返して下さい。***
 
 
+## VFS ハンドラ
+
+``$:`` にファイルを追加した場合、``require`` 時に VFS と解釈可能であれば、内部的にそのファイルを VFS として扱われる機能です。
+
+前にあった例を書き換えた場合の利用例を示します。(2) の部分です。
+
+```ruby
+require "invfs/zip"   # (1)
+
+$: << "mybox.zip"     # (2)
+
+require "mybox/core"  # (3)
+
+MyBox.sayhello!
+```
+
+VFS ハンドラを利用したい場合は、``.probe`` と ``.open`` メソッドを持ったオブジェクトを ``InVFS.regist`` で登録して下さい。
+
+```ruby
+class VFSHandler
+  def VFSHandler.probe(file)
+    # check available as VFS
+  end
+
+  def VFSHandler.open(file)
+    # open as VFS
+  end
+
+  InVFS.regist self
+end
+```
+
+実際にどのようにつかっているのかについては、[lib/invfs.rb](lib/invfs.rb) を見て下さい。
+
+
 ## Environment Variables (環境変数について)
 
   * ``RUBY_REQUIRE_INVFS_MAX_LOADSIZE`` :: 読み込みファイルの最大ファイルサイズの指定
@@ -175,17 +210,3 @@ VFS からファイルを読み込むためのメソッドです。
 
     ``caller_locations`` で VFS の直接確認が出来るようにするためには ruby の
     C コードに手を入れなきゃなんないし諦める。
-
-  * ``$:`` にファイルを指定した場合、InVFS の VFS mapper が自動で VFS に置き換えるようにするか?
-
-    実現させると、以下のことが可能となる:
-
-    ```shell
-    $ ruby -I mybox.zip -r invfs/zip -r mybox/core -e '......'
-    ```
-
-    これは、以下と同等である:
-
-    ```shell
-    $ ruby -r invfs/zip -e '$: << InVFS.zip("mybox.zip"); require "mybox/core"; ......'
-    ```
