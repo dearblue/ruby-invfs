@@ -2,11 +2,11 @@
 
 ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem) 対応機能を追加します。
 
-  * package name: invfs <https://github.com/dearblue/ruby-invfs>
+  * package name: [invfs](https://github.com/dearblue/ruby-invfs)
   * version: 0.3.1
   * production quality: CONCEPT, EXPERIMENTAL, UNSTABLE
-  * license: BSD-2-clause License
-  * author: dearblue <mailto:dearblue@users.noreply.github.com>
+  * license: [BSD-2-clause License](https://github.com/dearblue/ruby-invfs/blob/0.3.1/LICENSE)
+  * author: dearblue (<mailto:dearblue@users.noreply.github.com>)
   * report issue to: <https://github.com/dearblue/ruby-invfs/issues>
   * dependency ruby: ruby-2.2+
   * dependency ruby gems:
@@ -89,7 +89,7 @@ VFS オブジェクトは ``$:`` に追加する、利用者定義のロード�
   * ``.size(path) -> integer``
   * ``.read(path) -> string as binary``
 
-実際にどのように定義すればいいのかについては、[lib/invfs/zip.rb](lib/invfs/zip.rb) あるいは [lib/invfs.rb](lib/invfs.rb) で定義されている ``InVFS::UnionFS``、``InVFS::StringMapFS`` を参考にして下さい。
+実際にどのように定義すればいいのかについては、[InVFS::Zip](lib/invfs/zip.rb) あるいは [InVFS::UnionFS](lib/invfs/union.rb)、[InVFS::StringMapFS](lib/invfs/stringmap.rb) を参考にして下さい。
 
 ### ``.to_path() -> string``
 
@@ -154,7 +154,7 @@ class VFSHandler
 end
 ```
 
-実際にどのようにつかっているのかについては、[lib/invfs.rb](lib/invfs.rb) を見て下さい。
+実際にどのようにつかっているのかについては、[InVFS::Zip](lib/invfs/zip.rb) を見て下さい。
 
 
 ## Environment Variables (環境変数について)
