@@ -75,10 +75,33 @@ module InVFS
       end
     end
 
+    refine BasicObject do
+      def it_a_file?
+        false
+      end
+    end
+
+    [::String, ::File, ::Dir, ::Pathname].each do |klass|
+      refine klass do
+        def it_a_file?
+          File.file?(self)
+        end
+      end
+    end
+
     [::String, ::File, ::Dir].each do |klass|
       refine klass do
         def file?(path)
           File.file?(File.join(self, path))
+        end
+      end
+    end
+
+    [::String, ::File, ::Pathname].each do |klass|
+      refine klass do
+        def readat(off, size = nil, buf = "".b)
+          buf.replace File.binread(self, size, off)
+          buf
         end
       end
     end
@@ -184,10 +207,43 @@ module InVFS
         dir += "/" unless dir.empty? || dir[-1] == "/"
         (a, b, c) = lib.partition(dir)
         next unless a.empty? && !b.empty? && !c.empty?
+        next unless vfs = mapvfs(vfs)
         yield(vfs, c)
       end
     else
-      $:.each { |vfs| yield(vfs, lib) }
+      $:.each do |vfs|
+        next unless vfs = mapvfs(vfs)
+        yield(vfs, lib)
+      end
+    end
+
+    nil
+  end
+
+  @mapped_list = {}
+  @handler_list = []
+
+  def InVFS.regist(handler)
+    unless handler.respond_to?(:probe) && handler.respond_to?(:open)
+      raise "%s - #<%s:0x08x>" %
+        ["need ``.probe'' and ``.open'' methods for vfs handler",
+         handler.class, handler.object_id]
+    end
+
+    @handler_list << handler
+
+    nil
+  end
+
+  def InVFS.mapvfs(vfs)
+    return vfs unless vfs.it_a_file?
+
+    v = @mapped_list[vfs]
+    return v if v
+
+    @handler_list.each do |handler|
+      next unless handler.probe(vfs)
+      return @mapped_list[vfs] = handler.open(vfs)
     end
 
     nil
