@@ -89,7 +89,7 @@ VFS オブジェクトは ``$:`` に追加する、利用者定義のロード�
   * ``.size(path) -> integer``
   * ``.read(path) -> string as binary``
 
-実際にどのように定義すればいいのかについては、[InVFS::Zip](lib/invfs/zip.rb) あるいは [InVFS::UnionFS](lib/invfs/union.rb)、[InVFS::StringMapFS](lib/invfs/stringmap.rb) を参考にして下さい。
+実際にどのように定義すればいいのかについては、[InVFS::Zip](lib/invfs/zip.rb) あるいは [InVFS::UnionFS](lib/invfs/unionfs.rb)、[InVFS::StringMapFS](lib/invfs/stringmapfs.rb) を参考にして下さい。
 
 ### ``.to_path() -> string``
 
