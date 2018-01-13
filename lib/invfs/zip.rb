@@ -5,10 +5,6 @@ require_relative "../invfs"
 
 using InVFS::Extensions
 
-def InVFS.zip(*args)
-  InVFS::Zip.new(*args)
-end
-
 module InVFS
   class Zip
     attr_reader :path, :zip, :zipfile
