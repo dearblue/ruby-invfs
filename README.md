@@ -3,7 +3,7 @@
 ruby の ``require`` に仮想ファイルシステム (VFS; Virtual Filesystem) 対応機能を追加します。
 
   * package name: invfs <https://github.com/dearblue/ruby-invfs>
-  * version: 0.3
+  * version: 0.3.1
   * production quality: CONCEPT, EXPERIMENTAL, UNSTABLE
   * license: BSD-2-clause License
   * author: dearblue <mailto:dearblue@users.noreply.github.com>
